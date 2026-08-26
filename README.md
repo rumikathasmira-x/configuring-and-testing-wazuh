@@ -125,15 +125,16 @@ Insert the defining execution and active rule parameters inside the core root XM
   <command>firewall-drop</command>
   <location>local</location>
   <rules_id>5763</rules_id>
-  <timeout>600</timeout>
+  <timeout>60</timeout>
 </active-response>
 ```
-*   **Why**: Setting the location parameter structure to `local` makes the defense script execute directly on the compromised endpoint VM. The `timeout` element sets a strict 10-minute temporary ban block, allowing normal traffic to safely resume after the timer clears.
+*   **Why**: Setting the location parameter structure to `local` makes the defense script execute directly on the compromised endpoint VM. The `timeout` element sets a strict 1-minute temporary ban block, allowing normal traffic to safely resume after the timer clears.
 
 Restart the management container service node on your host to bring your new configuration rules online:
 ```bash
+cd ~/Desktop
 cd wazuh-docker/single-node
-docker compose restart wazuh-manager
+docker compose restart wazuh.manager
 ```
 
 ---
@@ -141,8 +142,11 @@ docker compose restart wazuh-manager
 ## ⚡ Step 5: Verification and Attack Validation Testing
 
 To prove the security system functions under real attack conditions, an aggressive SSH dictionary-based attack is directed straight at the Debian-based target system interface.
-
-### 1. Build an Attack Dictionary
+### 1. Install the SSH server and Hydra by running this command:
+```bash
+sudo apt install openssh-server hydra
+```
+### 2. Build an Attack Dictionary
 Construct a 15-entry mock credential file named `passwords.txt` within your testing environment terminal:
 ```bash
 cat << EOF > passwords.txt
@@ -179,17 +183,3 @@ During active script runtime execution, the attacking framework terminal logs co
 | `13:06:58` | `Wazuh-Debian-VM` | `sshd: brute force trying to get access...` | 10 | **5763** |
 | `13:06:59` | `Wazuh-Debian-VM` | `Host Blocked by firewall-drop Active Response` | 3 | **651** |
 
-To visually verify the active network firewall blocking tables straight inside your monitored **Debian-based VM**, dump your current firewall configuration state rules:
-```bash
-sudo iptables -L -n
-```
-
-```text
-Chain INPUT (policy ACCEPT)
-target     prot opt source               destination         
-DROP       all  --  <ATTACKER_IP>        0.0.0.0/0           
-```
-
-### 📝 Key Takeaways & Conclusions
-*   **Contextual Correlation Engine**: Raw authentication drops gracefully escalated into a high-severity Level 10 priority alert after threat activity metrics matched targeted conditions.
-*   **Instant Automated Isolation**: The latency between identifying the attack and applying the firewall block dropped below one full second, preventing further compromise attempts without requiring human intervention.
