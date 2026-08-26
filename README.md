@@ -45,6 +45,8 @@ sudo docker compose -f generate-indexer-certs.yml run --rm generator
 # Pull image payloads and initialize the entire single-node SIEM infrastructure
 sudo docker compose up -d
 ```
+<img width="1670" height="178" alt="Screenshot From 2026-08-26 14-02-16" src="https://github.com/user-attachments/assets/0d6e484e-302c-4f72-a7d3-b05d539f11e4" />
+
 *   **Why**: Generating independent system certificates secures communication protocols between components. Running `docker compose up -d` detaches the running container stack to run continuously in the background.
 
 ---
@@ -105,6 +107,8 @@ Apply your adjustments cleanly by recycling the agent background process loop:
 ```bash
 sudo systemctl restart wazuh-agent
 ```
+<img width="1357" height="603" alt="Screenshot From 2026-08-06 14-24-19" src="https://github.com/user-attachments/assets/979b5de1-8ae2-40d3-b9f1-c893ccde5771" />
+
 ---
 
 ## 🛡 Step 4: Activating Automated Threat Mitigations (Active Response)
@@ -189,4 +193,12 @@ During active script runtime execution, the attacking framework terminal logs co
 | `13:06:56` | `Wazuh-Debian-VM` | `sshd: authentication failed.` | 5 | **5760** |
 | `13:06:58` | `Wazuh-Debian-VM` | `sshd: brute force trying to get access...` | 10 | **5763** |
 | `13:06:59` | `Wazuh-Debian-VM` | `Host Blocked by firewall-drop Active Response` | 3 | **651** |
+
+### Before Adding the rules.
+<img width="1333" height="604" alt="Screenshot From 2026-08-25 20-53-57" src="https://github.com/user-attachments/assets/c375485e-ce0d-4e53-8513-fc8c476d07d3" />
+
+### After Configuring it.
+<img width="1337" height="427" alt="Screenshot From 2026-08-25 21-49-25" src="https://github.com/user-attachments/assets/7c100534-2238-424b-9223-3a2b3a53deab" />
+
+
 
