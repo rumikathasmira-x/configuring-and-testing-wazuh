@@ -22,9 +22,13 @@ Run the following commands on the main host machine to scale up the allocation l
 sudo sysctl -w vm.max_map_count=262144
 echo "vm.max_map_count=262144" | sudo tee -a /etc/sysctl.conf
 ```
+<img width="1006" height="90" alt="Screenshot From 2026-08-26 13-53-46" src="https://github.com/user-attachments/assets/56cbdcd5-e3d8-488a-aae3-6178be07715a" />
+
 *   **Why**: The underlying search architecture uses memory-mapped files. Insufficient map counts cause Out-Of-Memory boot loops on standard system architectures.
 
 ### 2. Pull and Deploy the Containers
+Install [Docker CLI](https://docs.docker.com/engine/install/ubuntu/) from the official guide. 
+
 Download the deployment templates, generate cluster-specific encryption certificates, and orchestrate the runtime environment:
 ```bash
 # Clone the verified stable release configuration branch
@@ -32,11 +36,14 @@ cd ~/Desktop
 git clone https://github.com/wazuh/wazuh-docker.git
 cd wazuh-docker/single-node
 
+# Start the docker service
+sudo systemctl start docker
+
 # Run the localized standalone utility to generate unique system certificates
-docker compose -f generate-indexer-certs.yml run --rm generator
+sudo docker compose -f generate-indexer-certs.yml run --rm generator
 
 # Pull image payloads and initialize the entire single-node SIEM infrastructure
-docker compose up -d
+sudo docker compose up -d
 ```
 *   **Why**: Generating independent system certificates secures communication protocols between components. Running `docker compose up -d` detaches the running container stack to run continuously in the background.
 
@@ -134,7 +141,7 @@ Restart the management container service node on your host to bring your new con
 ```bash
 cd ~/Desktop
 cd wazuh-docker/single-node
-docker compose restart wazuh.manager
+sudo docker compose restart wazuh.manager
 ```
 
 ---
