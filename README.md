@@ -181,8 +181,14 @@ EOF
 
 ### 2. Launch the Attack
 Execute the network authentication exploit target routing parameters via `hydra`:
+
+Create a test user that Hydra will target by running:
 ```bash
-hydra -l root -P passwords.txt ssh://<DEBIAN_VM_IP_ADDRESS>
+sudo useradd -m testuser
+```
+
+```bash
+hydra -l testuser -P passwords.txt ssh://<DEBIAN_VM_IP_ADDRESS> -t 4
 ```
 
 ### 3. Review Security Lab Validation Metrics
